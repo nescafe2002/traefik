@@ -89,6 +89,11 @@ func NewUDPEntryPoint(cfg *static.EntryPoint) (*UDPEntryPoint, error) {
 	if err != nil {
 		return nil, err
 	}
+
+	if network == "" {
+		network = "udp"
+	}
+
 	addr, err := net.ResolveUDPAddr(network, cfg.GetAddress())
 	if err != nil {
 		return nil, err

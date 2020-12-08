@@ -393,6 +393,10 @@ func buildListener(ctx context.Context, entryPoint *static.EntryPoint) (net.List
 		return nil, err
 	}
 
+	if network == "" {
+		network = "tcp"
+	}
+
 	listener, err := net.Listen(network, entryPoint.GetAddress())
 	if err != nil {
 		return nil, fmt.Errorf("error opening listener: %w", err)
