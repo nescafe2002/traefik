@@ -32,6 +32,10 @@ func (ep EntryPoint) GetProtocol() (string, error) {
 		return "", err
 	}
 
+	if network == "" {
+		return "", nil
+	}
+
 	return network[:3], nil
 }
 
