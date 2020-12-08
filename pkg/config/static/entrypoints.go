@@ -25,15 +25,28 @@ func (ep EntryPoint) GetAddress() string {
 }
 
 // GetProtocol returns the protocol part of the address field of the entry point.
+// Returns one of the values: tcp, udp.
 // If none is specified, it defaults to "tcp".
 func (ep EntryPoint) GetProtocol() (string, error) {
+	network, err := ep.GetNetwork()
+	if err != nil {
+		return "", err
+	}
+
+	return network[:3], nil
+}
+
+// GetNetwork returns the network part of the address field of the entry point.
+// Returns one of the values: tcp, tcp4, tcp6, udp, udp4, udp6.
+// If none is specified, it defaults to "tcp".
+func (ep EntryPoint) GetNetwork() (string, error) {
 	splitN := strings.SplitN(ep.Address, "/", 2)
 	if len(splitN) < 2 {
 		return "tcp", nil
 	}
 
 	protocol := strings.ToLower(splitN[1])
-	if protocol == "tcp" || protocol == "udp" {
+	if protocol == "tcp" || protocol == "tcp4" || protocol == "tcp6" || protocol == "udp" || protocol == "udp4" || protocol == "udp6" {
 		return protocol, nil
 	}
 

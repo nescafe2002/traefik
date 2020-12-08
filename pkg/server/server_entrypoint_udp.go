@@ -85,11 +85,15 @@ type UDPEntryPoint struct {
 
 // NewUDPEntryPoint returns a UDP entry point.
 func NewUDPEntryPoint(cfg *static.EntryPoint) (*UDPEntryPoint, error) {
-	addr, err := net.ResolveUDPAddr("udp", cfg.GetAddress())
+	network, err := cfg.GetNetwork()
 	if err != nil {
 		return nil, err
 	}
-	listener, err := udp.Listen("udp", addr)
+	addr, err := net.ResolveUDPAddr(network, cfg.GetAddress())
+	if err != nil {
+		return nil, err
+	}
+	listener, err := udp.Listen(network, addr)
 	if err != nil {
 		return nil, err
 	}
